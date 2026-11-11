@@ -13,6 +13,8 @@ La idea es sencilla: no reescribir lo que ya funciona (navegación, SLAM, motore
 | **v3** | Base que lava las mopas | 💭 Idea |
 | **v4** | Autovaciado | 💭 Idea |
 
+El plan detallado, paso a paso, está en el [ROADMAP](ROADMAP.md).
+
 ## Estructura
 
 ```
