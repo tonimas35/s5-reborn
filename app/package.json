@@ -1,0 +1,16 @@
+{
+  "name": "s5-reborn-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@fontsource/plus-jakarta-sans": "5.2.8",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10"
+  }
+}

@@ -26,3 +26,8 @@ secrets.h
 build/
 .vscode/
 *.bin
+
+# App
+app/node_modules/
+app/server/web/
+app/dist/

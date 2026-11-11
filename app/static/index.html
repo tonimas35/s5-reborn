@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F3F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Robot">
+<title>Robot de casa</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="top-text">
+      <p class="eyebrow" id="greeting">Hola</p>
+      <h1 id="title">Conectando con el robot…</h1>
+    </div>
+    <div class="battery" id="battery" role="img" aria-label="Batería">
+      <div class="battery-inner">
+        <span class="battery-pct" id="batteryPct">–</span>
+        <span class="battery-label">batería</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner" id="offline" role="alert" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5.5 12a10 10 0 0 1 13 0"/><path d="M9 15.5a5 5 0 0 1 6 0"/><path d="M12 19h.01"/><path d="M3 3l18 18"/></svg>
+    <span>No encuentro el robot. ¿Está encendido y cerca del wifi?</span>
+  </div>
+
+  <section class="card status" id="statusCard" aria-live="polite">
+    <div class="status-icon" id="statusIcon" aria-hidden="true"></div>
+    <div class="status-text">
+      <span class="status-main" id="statusMain">—</span>
+      <span class="status-sub" id="statusSub"></span>
+    </div>
+  </section>
+
+  <section class="card alert" id="alertCard" hidden>
+    <div class="alert-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 3 2.5 19.5h19z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>
+    </div>
+    <div class="alert-body">
+      <p class="alert-msg" id="alertMsg">Algo me impide seguir limpiando.</p>
+      <ol class="alert-steps">
+        <li>Busca dónde estoy en el mapa.</li>
+        <li>Libérame y déjame en una zona despejada.</li>
+        <li>Pulsa «Seguir limpiando».</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="card mapcard" aria-label="Mapa de la casa">
+    <div class="mapcard-head">
+      <h2>Tu casa</h2>
+      <span class="muted" id="mapMeta"></span>
+    </div>
+    <div class="map" id="map">
+      <div class="map-empty" id="mapEmpty">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 4l9 6.5"/><path d="M5.5 9v10.5h13V9"/><path d="M10 19.5v-5h4v5"/></svg>
+        <p class="map-empty-title">Todavía no conozco la casa</p>
+        <p class="muted">Pulsa «Limpiar toda la casa» y la iré dibujando mientras limpio.</p>
+      </div>
+      <div class="map-tools" id="mapTools" hidden>
+        <button type="button" class="tool" id="zoomOut" aria-label="Alejar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+        <button type="button" class="tool" id="zoomIn" aria-label="Acercar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+        <button type="button" class="tool" id="recenter" aria-label="Centrar el mapa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5a1 1 0 0 1 1-1h4"/><path d="M15 4h4a1 1 0 0 1 1 1v4"/><path d="M20 15v4a1 1 0 0 1-1 1h-4"/><path d="M9 20H5a1 1 0 0 1-1-1v-4"/><circle cx="12" cy="12" r="2.5"/></svg></button>
+      </div>
+    </div>
+    <p class="map-hint muted" id="mapHint">Arrastra, pellizca o toca una habitación</p>
+  </section>
+
+  <section class="rooms" id="roomPicker" hidden aria-label="Elegir habitaciones">
+    <p class="rooms-title">¿Qué habitaciones limpio?</p>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="actions" id="actions"></section>
+
+  <section class="card more">
+    <div class="more-row">
+      <span class="more-label">Potencia</span>
+      <div class="segmented" id="fan" role="radiogroup" aria-label="Potencia de aspiración"></div>
+    </div>
+    <button type="button" class="link-btn" id="locate">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 9.5a4 4 0 0 1 0 5"/><path d="M18.5 7a8 8 0 0 1 0 10"/></svg>
+      ¿Dónde estás? Te avisará con su voz
+    </button>
+  </section>
+
+  <section class="card care" id="care" hidden>
+    <h2>Pendiente de cuidar</h2>
+    <ul id="careList"></ul>
+  </section>
+
+  <footer class="foot muted" id="foot">s5-reborn</footer>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -37,23 +37,21 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 
 **Coste:** 5–65 €, según la batería.
 
-## Fase 3: App para mamá ⬜ (2–3 semanas)
+## Fase 3: App para mamá 🛠️ (en marcha desde el 12 nov)
 
 **Objetivo:** sustituir la interfaz técnica de Valetudo por la app del prototipo: modo claro, mapa 3D y botones grandes.
 
 | Paso | Qué | Listo cuando |
 |---|---|---|
-| 3.1 | Leer el **mapa real** de Valetudo (`/api/v2/robot/state/map`) y entender su formato | Tengo un volcado JSON del mapa de Reus |
-| 3.2 | Renderizarlo en **three.js**: suelo por habitaciones, paredes levantadas, luz suave | El mapa 3D muestra la casa real |
-| 3.3 | Robot y estela en directo, zoom, giro con dos dedos y doble toque en una habitación | Se mueve fluido en el móvil |
-| 3.4 | Acciones: limpiar todo, limpiar habitaciones, volver a la base, pausa | Funciona contra el robot real |
-| 3.5 | Mensajes en castellano llano (atascado, depósito lleno, batería baja…) | Cada error de Valetudo tiene su mensaje |
-| 3.6 | Servirla **desde el propio robot** y que arranque sola | Sobrevive a un reinicio |
+| 3.1 | ✅ Leer el mapa de Valetudo (`/api/v2/robot/state/map`) y entender su formato | Falta probarlo con el mapa real de Reus |
+| 3.2 | ✅ Renderizarlo en **three.js**: suelo por habitaciones, paredes levantadas, luz suave | Probado con la casa de demo |
+| 3.3 | ✅ Robot y estela en directo, zoom, giro con dos dedos y doble toque en una habitación | Falta probarlo en el móvil |
+| 3.4 | ✅ Acciones: limpiar todo, limpiar habitaciones, volver a la base, pausa, potencia, "¿dónde estás?" | Falta probarlo limpiando de verdad |
+| 3.5 | ✅ Mensajes en castellano llano para los errores más comunes | Revisar con errores reales |
+| 3.6 | ✅ Servidor en Go dentro del robot (puerto 8080) con arranque automático | Falta comprobar que sobrevive a un reinicio |
 | 3.7 | Instalarla en el móvil de mi madre como app (PWA) | Ella la abre sin ayuda |
 
-**Decisiones técnicas abiertas:**
-- ❓ Puerto y servidor web dentro del robot (Valetudo ya ocupa el 80). Opción: un servidor pequeño en otro puerto que también haga de proxy de `/api`, para evitar problemas de CORS.
-- ❓ Llevar three.js empaquetado dentro de la app, sin CDN, para que funcione sin internet.
+**Decisiones tomadas:** servidor propio en Go en el puerto 8080 que también hace de proxy de `/api` (Valetudo no envía cabeceras CORS), y three.js y las fuentes empaquetados dentro del binario, para que funcione sin internet. Ver [app/](app/README.md).
 
 ## Fase 4: Acceso remoto ⬜
 
