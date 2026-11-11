@@ -1,0 +1,28 @@
+# Nunca subir claves ni datos únicos del robot
+clave_robot
+clave_robot.*
+*.pem
+id_rsa*
+id_ed25519*
+authorized_keys
+backup-fabrica/
+*.img
+*.img.gz
+md5sums.txt
+
+# Firmwares (pesan mucho y se generan en Dustfab)
+*.pkg
+*.cpt
+*.tar.gz
+stock/
+
+# Secretos de wifi / ESPHome
+secrets.yaml
+secrets.h
+.env
+
+# Compilación
+.pio/
+build/
+.vscode/
+*.bin
