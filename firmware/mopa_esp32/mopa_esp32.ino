@@ -208,7 +208,7 @@ void setup() {
   prefs.begin("mopa", false);
   wifiSsid = prefs.getString("ssid", "");
   wifiPass = prefs.getString("pass", "");
-  robotHost = prefs.getString("robot", "");
+  robotHost = prefs.getString("robot", "192.168.0.40"); // IP por defecto del robot de casa
 
   if (!connectWifi()) { startConfigPortal(); return; }
 
