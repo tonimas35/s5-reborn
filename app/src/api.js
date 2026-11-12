@@ -4,12 +4,17 @@
 const BASE = '/api/v2';
 
 async function request(method, path, body) {
+  // Mientras limpia lejos del router, el robot a veces tarda varios segundos:
+  // mejor cortar y reintentar en la siguiente vuelta que acumular peticiones colgadas
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
   const res = await fetch(BASE + path, {
     method,
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
     body: body ? JSON.stringify(body) : undefined,
-    cache: 'no-store'
-  });
+    cache: 'no-store',
+    signal: ctrl.signal
+  }).finally(() => clearTimeout(timer));
   if (!res.ok) throw new Error(method + ' ' + path + ' -> ' + res.status);
   const text = await res.text();
   if (!text) return null;
@@ -61,6 +66,7 @@ export function readAttributes(attrs) {
 }
 
 export function readStats(points) {
+  if (!Array.isArray(points) || !points.some((p) => p && p.type === 'time')) return null; // respuesta rara: no tocar lo que hay
   const out = { seconds: 0, m2: 0 };
   for (const p of points || []) {
     if (p.type === 'time') out.seconds = p.value;

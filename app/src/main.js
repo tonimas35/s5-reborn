@@ -44,6 +44,7 @@ const state = {
   cleaning: null, // ids que pedimos limpiar desde la app
   fanPresets: [],
   failures: 0,
+  lastOk: Date.now(),
   busy: false
 };
 
@@ -317,21 +318,28 @@ function render() {
   }
   for (const b of fan.children) b.setAttribute('aria-checked', String(b.dataset.preset === a.fan));
 
-  $('offline').hidden = state.failures < 2;
+  // Solo avisa si lleva un rato sin respuesta: mientras limpia lejos del router hay cortes de pocos segundos
+  $('offline').hidden = state.failures < 2 || Date.now() - state.lastOk < 15000;
   $('foot').textContent = DEMO ? 'Modo demostración · casa de ejemplo' : 's5-reborn';
 }
 
 // ---------- Datos ----------
 
+let attrsInFlight = false;
 async function refreshAttributes() {
+  if (attrsInFlight) return; // no apilar peticiones si el robot va lento
+  attrsInFlight = true;
   try {
     state.attrs = readAttributes(await api.attributes());
     state.failures = 0;
+    state.lastOk = Date.now();
     if (!['cleaning', 'paused', 'returning', 'error'].includes(state.attrs.status) && state.attrs.status !== 'unknown') {
       if (state.attrs.status === 'docked') state.cleaning = null;
     }
   } catch (e) {
     state.failures++;
+  } finally {
+    attrsInFlight = false;
   }
   render();
 }
@@ -360,7 +368,7 @@ async function refreshMap() {
 }
 
 async function refreshStats() {
-  try { state.stats = readStats(await api.currentStats()); } catch (e) { /* nada */ }
+  try { state.stats = readStats(await api.currentStats()) || state.stats; } catch (e) { /* nada */ }
 }
 
 async function refreshCare() {
