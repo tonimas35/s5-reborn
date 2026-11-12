@@ -172,6 +172,13 @@ function render() {
   switch (s) {
     case 'docked':
       icon = 'dock';
+      if (a.statusFlag === 'resumable') {
+        // Volvió a cargar a mitad de limpieza: el robot sigue solo cuando tiene batería
+        title = 'Cargando para seguir';
+        main = 'Cargando para seguir limpiando';
+        sub = 'Llevo ' + fmtMinutes(state.stats.seconds) + ' · ' + fmtM2(state.stats.m2) + '. Sigo yo solo al cargarme';
+        break;
+      }
       main = a.batteryFlag === 'charging' ? 'Cargando en su base' : 'En su base, cargado';
       sub = done;
       break;
@@ -197,6 +204,10 @@ function render() {
       title = 'Volviendo a casa';
       main = 'Volviendo a la base';
       sub = 'Batería ' + (a.battery ?? '–') + '%';
+      if (a.statusFlag === 'resumable' || (a.battery ?? 100) <= 20) {
+        title = 'Voy a cargarme';
+        sub = 'Batería ' + (a.battery ?? '–') + '%. Luego sigo donde lo dejé';
+      }
       icon = 'home';
       break;
     case 'error':
@@ -276,6 +287,8 @@ function render() {
         [n ? 'Limpiar ' + (n === 1 ? article(segName([...state.selected][0])) : n + ' habitaciones') : 'Elige al menos una', 'play', actions.cleanSelected, 'primary', n === 0],
         ['Cancelar', '', actions.cancelPick, 'ghost']
       );
+    } else if (s === 'docked' && a.statusFlag === 'resumable') {
+      specs.push(['Seguir ahora', 'play', actions.resume, 'primary']);
     } else {
       specs.push(['Limpiar toda la casa', 'play', actions.cleanAll, 'primary', s === 'unknown']);
       if (state.segments.length) specs.push(['Elegir habitaciones', 'rooms', actions.pickRooms]);
@@ -334,7 +347,7 @@ async function refreshAttributes() {
     state.failures = 0;
     state.lastOk = Date.now();
     if (!['cleaning', 'paused', 'returning', 'error'].includes(state.attrs.status) && state.attrs.status !== 'unknown') {
-      if (state.attrs.status === 'docked') state.cleaning = null;
+      if (state.attrs.status === 'docked' && state.attrs.statusFlag !== 'resumable') state.cleaning = null;
     }
   } catch (e) {
     state.failures++;
