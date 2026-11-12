@@ -145,6 +145,9 @@ function button(label, icon, onClick, kind = '', disabled = false) {
 
 // ---------- Pintar la interfaz ----------
 
+let lastActionsKey = null;
+let lastChipsKey = null;
+
 function render() {
   const a = state.attrs;
   const s = a.status;
@@ -217,7 +220,7 @@ function render() {
   $('statusMain').textContent = main;
   $('statusSub').textContent = sub;
   const si = $('statusIcon');
-  si.innerHTML = ICONS[icon];
+  if (si.dataset.icon !== icon) { si.innerHTML = ICONS[icon]; si.dataset.icon = icon; }
   si.className = 'status-icon' + (s === 'error' ? ' is-alert' : '') + (s === 'cleaning' ? ' is-busy' : '');
 
   // Aviso de error
@@ -237,10 +240,12 @@ function render() {
   const totalArea = state.segments.reduce((t, x) => t + (x.area || 0), 0);
   $('mapMeta').textContent = segIds.length ? segIds.length + ' habitaciones' + (totalArea ? ' · ' + Math.round(totalArea) + ' m²' : '') : '';
 
-  // Selector de habitaciones
+  // Selector de habitaciones (solo se rehace si cambia algo: rehacerlo en cada
+  // actualización hacía que se perdieran toques en el móvil)
   const picker = $('roomPicker');
   picker.hidden = !state.selecting;
-  if (state.selecting) {
+  const chipsKey = state.selecting ? state.segments.map((x) => x.id + ':' + x.name + ':' + state.selected.has(String(x.id))).join('|') : '';
+  if (state.selecting && chipsKey !== lastChipsKey) {
     const chips = $('chips');
     chips.innerHTML = '';
     for (const seg of state.segments) {
@@ -258,33 +263,40 @@ function render() {
       chips.appendChild(c);
     }
   }
+  lastChipsKey = chipsKey;
 
-  // Botones según el estado
-  const box = $('actions');
-  box.innerHTML = '';
-  box.className = 'actions';
+  // Botones según el estado: se describen y solo se rehacen si cambia la descripción
+  const specs = [];
+  let two = false;
   if (s === 'docked' || s === 'idle' || s === 'unknown') {
     if (state.selecting) {
       const n = state.selected.size;
-      box.append(
-        button(n ? 'Limpiar ' + (n === 1 ? article(segName([...state.selected][0])) : n + ' habitaciones') : 'Elige al menos una', 'play', actions.cleanSelected, 'primary', n === 0),
-        button('Cancelar', '', actions.cancelPick, 'ghost')
+      specs.push(
+        [n ? 'Limpiar ' + (n === 1 ? article(segName([...state.selected][0])) : n + ' habitaciones') : 'Elige al menos una', 'play', actions.cleanSelected, 'primary', n === 0],
+        ['Cancelar', '', actions.cancelPick, 'ghost']
       );
     } else {
-      box.append(button('Limpiar toda la casa', 'play', actions.cleanAll, 'primary', s === 'unknown'));
-      if (state.segments.length) box.append(button('Elegir habitaciones', 'rooms', actions.pickRooms));
-      if (s === 'idle') box.append(button('Volver a la base', 'home', actions.home, 'ghost'));
+      specs.push(['Limpiar toda la casa', 'play', actions.cleanAll, 'primary', s === 'unknown']);
+      if (state.segments.length) specs.push(['Elegir habitaciones', 'rooms', actions.pickRooms]);
+      if (s === 'idle') specs.push(['Volver a la base', 'home', actions.home, 'ghost']);
     }
   } else if (s === 'cleaning') {
-    box.classList.add('two');
-    box.append(button('Pausar', 'pause', actions.pause), button('Volver a casa', 'home', actions.home, 'primary'));
+    two = true;
+    specs.push(['Pausar', 'pause', actions.pause], ['Volver a casa', 'home', actions.home, 'primary']);
   } else if (s === 'paused') {
-    box.classList.add('two');
-    box.append(button('Seguir', 'play', actions.resume, 'primary'), button('Volver a casa', 'home', actions.home));
+    two = true;
+    specs.push(['Seguir', 'play', actions.resume, 'primary'], ['Volver a casa', 'home', actions.home]);
   } else if (s === 'returning' || s === 'moving' || s === 'manual_control') {
-    box.append(button('Pausar', 'pause', actions.pause));
+    specs.push(['Pausar', 'pause', actions.pause]);
   } else if (s === 'error') {
-    box.append(button('Seguir limpiando', 'play', actions.resume, 'primary'), button('Dejarlo por hoy y volver a la base', 'home', actions.home, 'ghost'));
+    specs.push(['Seguir limpiando', 'play', actions.resume, 'primary'], ['Dejarlo por hoy y volver a la base', 'home', actions.home, 'ghost']);
+  }
+  const actionsKey = two + '|' + state.busy + '|' + specs.map(([l, i, , k = '', d = false]) => [l, i, k, d].join('~')).join('|');
+  if (actionsKey !== lastActionsKey) {
+    lastActionsKey = actionsKey;
+    const box = $('actions');
+    box.className = 'actions' + (two ? ' two' : '');
+    box.replaceChildren(...specs.map((sp) => button(...sp)));
   }
 
   // Potencia

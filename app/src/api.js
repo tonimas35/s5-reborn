@@ -12,7 +12,9 @@ async function request(method, path, body) {
   });
   if (!res.ok) throw new Error(method + ' ' + path + ' -> ' + res.status);
   const text = await res.text();
-  return text ? JSON.parse(text) : null;
+  if (!text) return null;
+  // Las órdenes (PUT) de Valetudo responden con el texto "OK", no con JSON
+  try { return JSON.parse(text); } catch { return text; }
 }
 
 const cap = (name) => '/robot/capabilities/' + name;
