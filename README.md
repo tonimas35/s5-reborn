@@ -18,7 +18,8 @@ El plan detallado, paso a paso, está en el [ROADMAP](ROADMAP.md).
 ## Estructura
 
 ```
-docs/         Guías paso a paso (rooteo, copia de fábrica, wifi y primer mapa)
+docs/         Guías paso a paso (rooteo, copia de fábrica, wifi, acceso remoto)
+app/          App para mamá (three.js + servidor Go que corre en el robot)
 hardware/     Lista de compra, esquema de conexiones y piezas impresas en 3D
 firmware/     Código del ESP32 del módulo de mopa
 integration/  Cómo habla el ESP32 con Valetudo (API REST / MQTT)
@@ -32,7 +33,7 @@ tools/        Utilidades de diagnóstico
 3. [Wifi y primer mapa](docs/03-wifi-y-primer-mapa.md)
 4. [Acceso remoto con Tailscale](docs/04-acceso-remoto.md)
 5. [La app para mamá](app/README.md)
-4. [Lista de compra del módulo v2](hardware/lista-de-compra.md)
+6. [Lista de compra del módulo v2](hardware/lista-de-compra.md)
 
 ## Aviso
 
