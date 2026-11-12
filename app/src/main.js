@@ -21,18 +21,19 @@ const ICONS = {
 const FAN_LABELS = { low: 'Suave', medium: 'Normal', high: 'Fuerte', max: 'Máxima' };
 
 // Traducción de los errores más comunes del S5 a frases normales
+// De lo más concreto a lo más general: "Stuck front bumper" debe caer en el parachoques, no en "stuck"
 const ERRORS = [
-  [/wheel|suspend|lifted/i, 'Una de mis ruedas no toca el suelo. Seguramente me he subido a algo.'],
-  [/stuck|trapped|entrapped/i, 'Me he quedado atascado y no sé salir.'],
+  [/bumper/i, 'Mi parachoques delantero se ha quedado apretado. Mira si estoy encajado contra algo y dale unos golpecitos por delante para que se suelte.'],
   [/main brush|roller/i, 'El cepillo grande se ha enredado. Mira si tiene pelos o algún cordón.'],
   [/side brush/i, 'El cepillo pequeño de la esquina se ha enredado.'],
+  [/wheel|suspend|lifted/i, 'Una de mis ruedas no toca el suelo. Seguramente me he subido a algo.'],
   [/cliff|fall/i, 'Mis sensores de abajo creen que hay un escalón. Puede que estén sucios.'],
-  [/bumper/i, 'Mi parachoques delantero se ha quedado apretado.'],
   [/dust ?bin|bin/i, 'Falta el depósito de polvo o no está bien puesto.'],
   [/filter/i, 'El filtro está atascado o mojado.'],
   [/laser|lidar|lds/i, 'La torreta de arriba no gira bien o está tapada.'],
   [/battery|charg/i, 'Tengo un problema con la batería o con la carga.'],
-  [/magnetic|virtual/i, 'He encontrado una zona prohibida y no sé por dónde seguir.']
+  [/magnetic|virtual/i, 'He encontrado una zona prohibida y no sé por dónde seguir.'],
+  [/stuck|trapped|entrapped/i, 'Me he quedado atascado y no sé salir.']
 ];
 
 const state = {
