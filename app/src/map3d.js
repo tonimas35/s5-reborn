@@ -103,6 +103,7 @@ export class HouseMap {
     this.controls.maxZoom = 7;
     this.controls.touches = { ONE: TOUCH.PAN, TWO: TOUCH.DOLLY_ROTATE };
     this.controls.addEventListener('change', () => { this.needsRender = true; });
+    this.controls.addEventListener('start', () => { this.userMoved = true; }); // la persona ha movido el mapa
 
     this.buildRobot();
     this.buildDock();
@@ -322,7 +323,22 @@ export class HouseMap {
 
     // Centrar la casa en el origen
     this.world.position.set(-cx, 0, -cz);
+    const grew = !this.extent || W > this.extent.x || D > this.extent.z;
     this.extent = { x: W, z: D };
+    // Puntos ocupados (relativos al centro), para encuadrar la casa y no la caja que la envuelve
+    const pts = [];
+    const step = Math.max(1, Math.round(Math.sqrt((gw * gh) / 40000))); // como mucho ~40k muestras
+    for (let y = 0; y < gh; y += step) for (let x = 0; x < gw; x += step) {
+      if (cells[y * gw + x]) pts.push((x + 0.5 - gw / 2) * ps, FLOOR_H, (y + 0.5 - gh / 2) * ps);
+    }
+    for (const r of wallRects) pts.push((r.x - minX + r.w / 2 - gw / 2) * ps, FLOOR_H + WALL_H, (r.y - minY + r.h / 2 - gh / 2) * ps);
+    this.contentPts = pts;
+    // El encuadre depende del tamaño de la casa, que crece mientras el robot descubre el mapa
+    if (this.aspect && (grew || !this.framed)) {
+      this.fitFrustum();
+      // Mientras descubre la casa, si nadie ha tocado el mapa, lo mantenemos centrado
+      if (grew && this.framed && !this.userMoved) this.recenter(false);
+    }
     this.applyHighlight();
 
     // Sombra ajustada al tamaño de la casa
@@ -453,28 +469,62 @@ export class HouseMap {
     this.needsRender = true;
   }
 
+  // Dirección de la cámara en la vista por defecto (la de "Centrar el mapa")
+  defaultView() {
+    const dist = 4000;
+    const polar = 0.86; // ~49° desde la vertical
+    const azimuth = Math.PI / 4.5;
+    return new Vector3(
+      dist * Math.sin(polar) * Math.sin(azimuth),
+      dist * Math.cos(polar),
+      dist * Math.sin(polar) * Math.cos(azimuth)
+    );
+  }
+
+  // Ajusta el encuadre a lo que ocupa la casa vista desde la cámara por defecto.
+  // Usa las celdas reales de suelo y paredes y descarta el 1 % más alejado: el láser
+  // ve rayos sueltos por puertas y ventanas que agrandan mucho la caja del mapa.
   fitFrustum() {
-    const ex = (this.extent && this.extent.x) || 800;
-    const ez = (this.extent && this.extent.z) || 800;
-    const half = 0.5 * Math.hypot(ex, ez) * 1.02;
-    let hw = half;
-    let hh = half * 0.78;
+    const eye = this.defaultView();
+    const view = new Matrix4().lookAt(eye, new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+    const inv = view.clone().invert();
+    const pts = this.contentPts || [];
+    let x0, x1, y0, y1;
+    if (pts.length >= 30) {
+      const xs = [], ys = [];
+      const v = new Vector3();
+      for (let i = 0; i < pts.length; i += 3) {
+        v.set(pts[i], pts[i + 1], pts[i + 2]).applyMatrix4(inv);
+        xs.push(v.x);
+        ys.push(v.y);
+      }
+      const q = (a, f) => a[Math.min(a.length - 1, Math.max(0, Math.round(f * (a.length - 1))))];
+      xs.sort((a, b) => a - b);
+      ys.sort((a, b) => a - b);
+      [x0, x1, y0, y1] = [q(xs, 0.01), q(xs, 0.99), q(ys, 0.01), q(ys, 0.99)];
+    } else {
+      const h = ((this.extent && Math.max(this.extent.x, this.extent.z)) || 800) / 2;
+      [x0, x1, y0, y1] = [-h, h, -h * 0.7, h * 0.7];
+    }
+    // Centro de la casa en pantalla, pasado a coordenadas del mundo
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    const right = new Vector3().setFromMatrixColumn(view, 0);
+    const up = new Vector3().setFromMatrixColumn(view, 1);
+    this.viewCenter = right.multiplyScalar(cx).add(up.multiplyScalar(cy));
+    let hw = Math.max(60, (x1 - x0) / 2) * 1.1; // un poco de aire alrededor
+    let hh = Math.max(60, (y1 - y0) / 2) * 1.15;
     if (hw / hh > this.aspect) hh = hw / this.aspect; else hw = hh * this.aspect;
     Object.assign(this.camera, { left: -hw, right: hw, top: hh, bottom: -hh });
     this.camera.updateProjectionMatrix();
   }
 
   recenter(animate = true) {
-    const dist = 4000;
-    const polar = 0.86; // ~49° desde la vertical
-    const azimuth = Math.PI / 4.5;
-    const pos = new Vector3(
-      dist * Math.sin(polar) * Math.sin(azimuth),
-      dist * Math.cos(polar),
-      dist * Math.sin(polar) * Math.cos(azimuth)
-    );
+    this.userMoved = false;
+    if (this.aspect) this.fitFrustum();
+    const center = this.viewCenter ? this.viewCenter.clone() : new Vector3(0, 0, 0);
+    const pos = this.defaultView().add(center);
     const apply = () => {
-      this.controls.target.set(0, 0, 0);
+      this.controls.target.copy(center);
       this.camera.position.copy(pos);
       this.camera.zoom = 1;
       this.camera.updateProjectionMatrix();
@@ -482,16 +532,18 @@ export class HouseMap {
       this.needsRender = true;
     };
     if (!animate) return apply();
-    this.tween({ target: new Vector3(0, 0, 0), position: pos, zoom: 1 });
+    this.tween({ target: center, position: pos, zoom: 1 });
   }
 
   zoomBy(f) {
+    this.userMoved = true;
     this.tween({ zoom: Math.min(this.controls.maxZoom, Math.max(this.controls.minZoom, this.camera.zoom * f)) });
   }
 
   focusRoom(id) {
     const s = this.segments.get(id);
     if (!s) return;
+    this.userMoved = true;
     const t = s.centroid.clone().add(this.world.position);
     t.y = 0;
     const offset = this.camera.position.clone().sub(this.controls.target);
