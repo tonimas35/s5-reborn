@@ -25,6 +25,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 - ⬜ Programar una limpieza automática (día y hora a elegir con ella)
 - ⬜ Reservar la IP del robot en el router, si tengo acceso
 - ⬜ **Medir la autonomía** en la primera limpieza
+- ⬜ Probar el servo de la mopa con el ESP32 ya grabado (los servos están en Reus) → [firmware v0](firmware/README.md)
 - ⬜ Apuntar la **lista de quejas de mamá**: dónde se atasca, qué zonas no limpia bien, qué le resulta difícil
 
 **Listo cuando:** limpia la casa entera sola, vuelve a la base y mi madre sabe ponerlo en marcha.
