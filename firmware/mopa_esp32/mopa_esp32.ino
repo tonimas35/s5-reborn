@@ -170,6 +170,33 @@ void handleSave() {
   ESP.restart();
 }
 
+// ---------- Configuración por cable USB ----------
+// Alternativa al portal: enviar por el puerto serie (115200) estas cuatro líneas:
+//   SETWIFI / nombre del wifi / contraseña / IP del robot
+// Útil si no estás cerca del ESP32. La contraseña nunca se repite por el puerto serie.
+String serialLine(uint32_t timeoutMs) {
+  Serial.setTimeout(timeoutMs);
+  String s = Serial.readStringUntil('\n');
+  s.trim();
+  return s;
+}
+
+void checkSerialConfig() {
+  if (!Serial.available()) return;
+  String cmd = serialLine(500);
+  if (cmd != "SETWIFI") return;
+  String ssid = serialLine(3000);
+  String pass = serialLine(3000);
+  String robot = serialLine(3000);
+  if (ssid.isEmpty()) { Serial.println("SETWIFI: falta el nombre del wifi"); return; }
+  prefs.putString("ssid", ssid);
+  prefs.putString("pass", pass);
+  if (robot.length()) prefs.putString("robot", robot);
+  Serial.printf("SETWIFI: guardado (wifi %s). Reiniciando...\n", ssid.c_str());
+  delay(500);
+  ESP.restart();
+}
+
 // ---------- Arranque ----------
 void startConfigPortal() {
   configMode = true;
@@ -226,6 +253,7 @@ void setup() {
 }
 
 void loop() {
+  checkSerialConfig();
   if (configMode) {
     dns.processNextRequest();
     server.handleClient();

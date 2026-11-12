@@ -52,3 +52,11 @@ Se evitan los pines de arranque (0, 2, 12 y 15) y los de solo entrada (34–39) 
 | `cleaning` | Giran | Pulsos según la zona | Bajada (subida en alfombra) |
 | `returning` / `docked` / `idle` | Paradas | Parada | Subida |
 | `error` / `paused` | Paradas | Parada | Subida + pitido |
+
+### Configurar el wifi sin acercarse al ESP32
+
+Si el ESP32 está enchufado al PC y no puedes acercarte a su red `Mopa-S5-config`, puedes configurarlo desde el móvil a través del robot:
+
+1. Copia [`tools/mopa-wifi-form`](../tools/mopa-wifi-form/) compilado para ARMv7 al robot y arráncalo: `/tmp/mopa-wifi-form &`. Escucha en el puerto 8081, propone el wifi del robot y se cierra solo tras un envío o a los 20 minutos.
+2. Desde el móvil, abre `http://<IP del robot>:8081` y escribe la contraseña. Se guarda en la RAM del robot (`/tmp`), con permisos 600.
+3. En el PC, ejecuta [`tools/mopa-wifi-usb.ps1`](../tools/mopa-wifi-usb.ps1). Recoge la configuración por SSH, la borra del robot y se la envía al ESP32 por USB con el comando `SETWIFI`. La contraseña no se muestra en pantalla.
