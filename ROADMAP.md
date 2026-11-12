@@ -53,11 +53,11 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 
 **Decisiones tomadas:** servidor propio en Go en el puerto 8080 que también hace de proxy de `/api` (Valetudo no envía cabeceras CORS), y three.js y las fuentes empaquetados dentro del binario, para que funcione sin internet. Ver [app/](app/README.md).
 
-## Fase 4: Acceso remoto ⬜
+## Fase 4: Acceso remoto ✅ (12 nov)
 
 **Objetivo:** poder revisar y actualizar el robot desde Barcelona.
 
-- ❓ Probar si Tailscale funciona en el S5 (kernel antiguo). Plan B: un dispositivo pequeño en su casa.
+- ✅ Tailscale 1.104.6 funcionando en el robot, con arranque automático → [guía](docs/04-acceso-remoto.md). Probado desde el móvil con 5G.
 - ⬜ Avisos al móvil si el robot se queda atascado o da error
 
 ## Fase 5: Módulo de mopa con ESP32 (versión 2) ⬜ (1–2 meses)
@@ -67,7 +67,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 | Paso | Qué | Listo cuando |
 |---|---|---|
 | 5.1 | Comprar las piezas → [lista](hardware/lista-de-compra.md) | Todo recibido |
-| 5.2 | **Banco de pruebas** en la mesa: ESP32 + DRV8833 + motores + bomba + servo | Cada pieza responde desde el ESP32 |
+| 5.2 | 🛠️ **Banco de pruebas** en la mesa: ESP32 + servo con el robot real ([firmware v0](firmware/README.md)); faltan DRV8833, motores y bomba | Cada pieza responde desde el ESP32 |
 | 5.3 | Firmware: leer el estado de Valetudo por REST y aplicar la lógica de [firmware/](firmware/README.md) | Las mopas se paran y se levantan solas al volver a la base |
 | 5.4 | Mecánica en 3D: discos, soporte de motores y elevación | Encaja bajo el robot y pasa por debajo de los muebles |
 | 5.5 | Alimentación desde la batería del robot, con fusible y convertidores | Funciona sin pilas aparte |

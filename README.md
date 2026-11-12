@@ -30,6 +30,8 @@ tools/        Utilidades de diagnóstico
 1. [Rootear el S5 e instalar Valetudo](docs/01-rooteo-s5-valetudo.md)
 2. [Copia de seguridad de fábrica](docs/02-copia-de-fabrica.md)
 3. [Wifi y primer mapa](docs/03-wifi-y-primer-mapa.md)
+4. [Acceso remoto con Tailscale](docs/04-acceso-remoto.md)
+5. [La app para mamá](app/README.md)
 4. [Lista de compra del módulo v2](hardware/lista-de-compra.md)
 
 ## Aviso
