@@ -14,7 +14,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 - ✅ Repo `s5-reborn` con la guía de rooteo, la lista de compra y el plan del módulo
 - ✅ Prototipo visual de la app con el mapa 3D
 
-## Fase 1: Entrega en Reus (versión 1) 🔜 este finde
+## Fase 1: Entrega en Reus (versión 1) 🔜 sábado 14 nov
 
 **Objetivo:** que el robot funcione en casa de mi madre, tal cual, con Valetudo.
 
@@ -23,7 +23,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 - ⬜ Activar *Persistent maps* y hacer la primera *Full Cleanup* con las puertas abiertas
 - ⬜ Revisar los *Segments* y poner nombre a las habitaciones
 - ⬜ Programar una limpieza automática (día y hora a elegir con ella)
-- ⬜ Reservar la IP del robot en el router, si tengo acceso
+- ⬜ Reservar en el router la IP del robot y la del ESP32, y apuntar la del robot en el manual
 - ⬜ **Medir la autonomía** en la primera limpieza
 - ⬜ Probar el servo de la mopa con el ESP32 ya grabado (los servos están en Reus) → [firmware v0](firmware/README.md)
 - ⬜ Apuntar la **lista de quejas de mamá**: dónde se atasca, qué zonas no limpia bien, qué le resulta difícil
@@ -50,7 +50,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 | 3.4 | ✅ Acciones: limpiar todo, limpiar habitaciones, volver a la base, pausa, potencia, "¿dónde estás?" | Falta probarlo limpiando de verdad |
 | 3.5 | ✅ Mensajes en castellano llano para los errores más comunes | Revisar con errores reales |
 | 3.6 | ✅ Servidor en Go dentro del robot (puerto 8080) con arranque automático | Falta comprobar que sobrevive a un reinicio |
-| 3.7 | Instalarla en el móvil de mi madre como app (PWA) | Ella la abre sin ayuda |
+| 3.7 | Instalarla en el iPhone de mi madre: Safari → Compartir → «Añadir a pantalla de inicio» | Ella la abre sin ayuda |
 
 **Decisiones tomadas:** servidor propio en Go en el puerto 8080 que también hace de proxy de `/api` (Valetudo no envía cabeceras CORS), y three.js y las fuentes empaquetados dentro del binario, para que funcione sin internet. Ver [app/](app/README.md).
 
@@ -75,7 +75,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 | 5.6 | Pruebas de 1–2 semanas **en mi casa** | Sin fugas, sin atascos, autonomía aceptable |
 | 5.7 | Instalarlo en Reus | Mi madre lo usa a diario |
 
-**Coste:** 20–37 €. ❓ Necesito una impresora 3D o acceso a una.
+**Coste:** 20–37 €. Impresora 3D: tengo acceso a una.
 
 ## Fase 6: Base que lava (versión 3) ⬜
 
@@ -93,9 +93,9 @@ Depósito impreso con compuerta inferior, junta, rampa de alineado y motor de as
 
 ---
 
-## Preguntas abiertas
+## Decisiones (12 nov)
 
-- ❓ ¿Impresora 3D propia o de alguien?
-- ❓ ¿El móvil de mi madre es iPhone o Android? Afecta a cómo se instala la app.
-- ❓ ¿Tengo acceso al router de su casa?
-- ❓ ¿Cada cuánto voy a Reus? Marca el ritmo de las instalaciones.
+- Impresora 3D: sí, tengo acceso a una.
+- Móvil de mi madre: **iPhone**. La app se instala desde Safari como app web.
+- Router de su casa: tengo acceso. Se puede reservar IP para el robot y el ESP32.
+- Próxima visita a Reus: **sábado 14 nov**.
