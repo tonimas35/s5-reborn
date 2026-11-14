@@ -14,43 +14,47 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 - ✅ Repo `s5-reborn` con la guía de rooteo, la lista de compra y el plan del módulo
 - ✅ Prototipo visual de la app con el mapa 3D
 
-## Fase 1: Entrega en Reus (versión 1) 🔜 sábado 14 nov
+## Fase 1: Entrega en Reus (versión 1) 🛠️ casi lista (14 nov)
 
 **Objetivo:** que el robot funcione en casa de mi madre, tal cual, con Valetudo.
 
-- ⬜ Antes de salir: limpiar el cepillo principal y dejarlo cargando
-- ⬜ Conectarlo al wifi de casa (2,4 GHz) → [guía](docs/03-wifi-y-primer-mapa.md)
-- ⬜ Activar *Persistent maps* y hacer la primera *Full Cleanup* con las puertas abiertas
-- ⬜ Revisar los *Segments* y poner nombre a las habitaciones
+- ✅ Limpiar el cepillo principal y la entrada al depósito (estaba medio tapada de pelusa)
+- ✅ Conectarlo al wifi de casa sin cambiar la contraseña del router, aunque lleva `#` → [cómo](docs/03-wifi-y-primer-mapa.md)
+- ✅ *Persistent maps* + borrar el mapa de Barcelona + primera limpieza completa: **53 min, 50 m², sin atascos**
+- ✅ Habitaciones: Valetudo creó 8 solas; divididas y renombradas a 11 (comedor, cocina, entrada y pasillo, pasillo 2, tendedor, baño 1, baño 2, matrimonio, hijo 1, hijo 2, despacho)
+- ✅ IP del robot reservada en el Livebox (`192.168.1.23`) y apuntada en el manual
+- ✅ **Autonomía:** ~1 %/min en potencia Normal → unos 75–80 min por carga. Con recarga a mitad, sigue solo
+- ⬜ Instalar la app en su iPhone y que la use ella (limpiar todo, una habitación)
 - ⬜ Programar una limpieza automática (día y hora a elegir con ella)
-- ⬜ Reservar en el router la IP del robot y la del ESP32, y apuntar la del robot en el manual
-- ⬜ **Medir la autonomía** en la primera limpieza
-- ⬜ Probar el servo de la mopa con el ESP32 ya grabado (los servos están en Reus) → [firmware v0](firmware/README.md)
-- ⬜ Apuntar la **lista de quejas de mamá**: dónde se atasca, qué zonas no limpia bien, qué le resulta difícil
+- ⬜ Probar el fregado de serie (depósito + paño) → manual, pestaña «El robot»
+- ⬜ Probar el servo de la mopa con el ESP32 y reservar su IP → [firmware v0](firmware/README.md)
+- ⬜ Apuntar la **lista de quejas de mamá**. De momento, en Barcelona: un atasco del cepillo grande (pelos) y el parachoques bloqueado junto a la base
 
 **Listo cuando:** limpia la casa entera sola, vuelve a la base y mi madre sabe ponerlo en marcha.
 
-## Fase 2: Puesta a punto ⬜ (semana siguiente)
+## Fase 2: Puesta a punto ⬜
 
-- ⬜ Batería nueva `BRR-2P4S-5200S`, **solo si** la autonomía es menor de 40 min
-- ⬜ Kit de cepillo de goma, cepillo lateral y filtros
-- ⬜ Revisar ruedas y la rueda delantera
+- ✅ Batería: **no hace falta cambiarla** (75–80 min de autonomía, el límite era 40)
+- ⬜ Kit de cepillo de goma, cepillo lateral y filtros (el cepillo grande está gastado)
+- ⬜ Revisar ruedas, rueda delantera y que el parachoques no se quede hundido
 
-**Coste:** 5–65 €, según la batería.
+**Coste:** 10–20 €.
 
 ## Fase 3: App para mamá 🛠️ (en marcha desde el 12 nov)
 
 **Objetivo:** sustituir la interfaz técnica de Valetudo por la app del prototipo: modo claro, mapa 3D y botones grandes.
 
-| Paso | Qué | Listo cuando |
+| Paso | Qué | Estado |
 |---|---|---|
-| 3.1 | ✅ Leer el mapa de Valetudo (`/api/v2/robot/state/map`) y entender su formato | Falta probarlo con el mapa real de Reus |
-| 3.2 | ✅ Renderizarlo en **three.js**: suelo por habitaciones, paredes levantadas, luz suave | Probado con la casa de demo |
-| 3.3 | ✅ Robot y estela en directo, zoom, giro con dos dedos y doble toque en una habitación | Falta probarlo en el móvil |
-| 3.4 | ✅ Acciones: limpiar todo, limpiar habitaciones, volver a la base, pausa, potencia, "¿dónde estás?" | Falta probarlo limpiando de verdad |
-| 3.5 | ✅ Mensajes en castellano llano para los errores más comunes | Revisar con errores reales |
-| 3.6 | ✅ Servidor en Go dentro del robot (puerto 8080) con arranque automático | Falta comprobar que sobrevive a un reinicio |
-| 3.7 | Instalarla en el iPhone de mi madre: Safari → Compartir → «Añadir a pantalla de inicio» | Ella la abre sin ayuda |
+| 3.1 | Leer el mapa de Valetudo y su formato | ✅ Probado con los mapas reales de Barcelona y Reus |
+| 3.2 | Renderizarlo en **three.js** | ✅ Encuadre automático de la casa real |
+| 3.3 | Robot y estela en directo, zoom, giro | ✅ Probado limpiando de verdad |
+| 3.4 | Acciones: limpiar todo, habitaciones, volver, pausa, potencia, "¿dónde estás?" | ✅ Probadas con el robot real |
+| 3.5 | Mensajes en castellano llano para los errores | ✅ Probados con errores reales (cepillo, parachoques) |
+| 3.6 | Servidor en Go en el robot con arranque automático | ✅ Sobrevive a reinicios |
+| 3.7 | Instalarla en el iPhone de mi madre: Safari → Compartir → «Añadir a pantalla de inicio» | ⬜ |
+
+**Fallos encontrados probando con el robot real (12–14 nov), todos corregidos:** botones que se rehacían cada 2 s y perdían toques · Valetudo responde «OK» en texto y la app mostraba error en cada orden · aviso de «sin conexión» intermitente por los cortes de wifi al limpiar lejos del router · al recargar a mitad decía «la casa está tranquila» en vez de «cargando para seguir» · el mapa no se encuadraba al crecer · «Stuck front bumper» salía como «atascado» · habitaciones sin nombre todas iguales y distintas entre lista y mapa.
 
 **Decisiones tomadas:** servidor propio en Go en el puerto 8080 que también hace de proxy de `/api` (Valetudo no envía cabeceras CORS), y three.js y las fuentes empaquetados dentro del binario, para que funcione sin internet. Ver [app/](app/README.md).
 
@@ -58,7 +62,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 
 **Objetivo:** poder revisar y actualizar el robot desde Barcelona.
 
-- ✅ Tailscale 1.104.6 funcionando en el robot, con arranque automático → [guía](docs/04-acceso-remoto.md). Probado desde el móvil con 5G.
+- ✅ Tailscale 1.104.6 funcionando en el robot, con arranque automático → [guía](docs/04-acceso-remoto.md). Probado desde el móvil con 5G y desde Reus.
 - ⬜ Avisos al móvil si el robot se queda atascado o da error
 
 ## Fase 5: Módulo de mopa con ESP32 (versión 2) ⬜ (1–2 meses)
@@ -93,9 +97,9 @@ Depósito impreso con compuerta inferior, junta, rampa de alineado y motor de as
 
 ---
 
-## Decisiones (12 nov)
+## Decisiones (12–14 nov)
 
 - Impresora 3D: sí, tengo acceso a una.
 - Móvil de mi madre: **iPhone**. La app se instala desde Safari como app web.
 - Router de su casa: tengo acceso. Se puede reservar IP para el robot y el ESP32.
-- Próxima visita a Reus: **sábado 14 nov**.
+- Primera visita a Reus: **sábado 14 nov**. Router de casa: Livebox 6 de Orange.
