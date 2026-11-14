@@ -26,3 +26,11 @@ Anota cuánto dura esa primera limpieza (en *Current Statistics*). Como referenc
 
 - Más de 60 minutos: batería sana.
 - Menos de 30–40 minutos: conviene cambiarla. La referencia es `BRR-2P4S-5200S`, de 14,4 V y 5200 mAh.
+
+## Si la contraseña del wifi lleva ; \ / # ' "
+
+Valetudo no deja guardarla («the Password must not contain any of the following characters»). No hace falta cambiar la contraseña del router: en el S5 con firmware 2008 el script de Roborock la maneja bien. Con el robot en modo punto de acceso y el PC conectado a su red, ejecuta [`tools/configurar-wifi-robot.ps1`](../tools/configurar-wifi-robot.ps1) `-Ssid "NombreDelWifi"` y escribe la contraseña en la ventana. Probado en Reus (14/11/2026) con una clave terminada en `#`.
+
+## Habitaciones
+
+Con *Persistent maps* activado **antes** de borrar el mapa, la primera limpieza completa crea las habitaciones sola (en Reus salieron 8). Si una zona junta varias (comedor + cocina + pasillo), se divide con `MapSegmentEditCapability` (`split_segment` con dos puntos en cm) y se renombra con `MapSegmentRenameCapability`. Ojo: al renombrar o dividir, el robot cambia los números internos de las habitaciones.
