@@ -365,9 +365,12 @@ async function refreshMap() {
     map.update(m);
     const segs = ((m && m.layers) || []).filter((l) => l.type === 'segment').map((l) => ({
       id: String(l.metaData.segmentId),
-      name: l.metaData.name || 'Habitación',
+      name: l.metaData.name || '',
       area: (l.metaData.area || 0) / 10000
     }));
+    // Sin nombre, se numeran de mayor a menor para poder distinguirlas ("Habitación 1" es la más grande)
+    segs.sort((a, b) => b.area - a.area); // en la lista, de la más grande a la más pequeña
+    segs.filter((s) => !s.name).forEach((s, i) => { s.name = 'Habitación ' + (i + 1); });
     if (segs.length) {
       const names = await api.segments().catch(() => []);
       for (const s of segs) {
@@ -376,6 +379,7 @@ async function refreshMap() {
       }
     }
     state.segments = segs;
+    map.setNames(Object.fromEntries(segs.map((x) => [x.id, x.name])));
     if (had !== map.hasMap) render();
   } catch (e) { /* lo reintentamos en la siguiente vuelta */ }
   render();

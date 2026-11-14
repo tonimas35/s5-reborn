@@ -276,7 +276,7 @@ export class HouseMap {
         const label = document.createElement('button');
         label.type = 'button';
         label.className = 'map3d-label';
-        label.textContent = (layer.metaData && layer.metaData.name) || 'Habitación ' + colorIndex;
+        label.textContent = (this.names && this.names[id]) || (layer.metaData && layer.metaData.name) || 'Habitación ' + colorIndex;
         label.addEventListener('click', () => this.onRoomTap(id));
         this.labelLayer.appendChild(label);
         this.segments.set(id, { name: label.textContent, label, centroid: new Vector3(sx / n, FLOOR_H + WALL_H + 14, sz / n) });
@@ -533,6 +533,15 @@ export class HouseMap {
     };
     if (!animate) return apply();
     this.tween({ target: center, position: pos, zoom: 1 });
+  }
+
+  // Los nombres los decide la app (para que mapa y lista digan lo mismo)
+  setNames(names) {
+    this.names = names;
+    for (const [id, s] of this.segments) {
+      const n = names[id];
+      if (n && s.name !== n) { s.name = n; s.label.textContent = n; }
+    }
   }
 
   zoomBy(f) {
