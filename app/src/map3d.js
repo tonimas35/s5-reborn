@@ -535,6 +535,53 @@ export class HouseMap {
     this.tween({ target: center, position: pos, zoom: 1 });
   }
 
+  // Muebles etiquetados (cm del mapa). Maqueta sencilla: no pretende ser realista, solo que se reconozcan
+  setFurniture(list) {
+    const fp = JSON.stringify(list || []);
+    if (fp === this.furnitureFp) return;
+    this.furnitureFp = fp;
+    if (this.furniture) {
+      this.world.remove(this.furniture);
+      this.furniture.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
+    }
+    const g = new Group();
+    const box = new BoxGeometry(1, 1, 1);
+    const mats = {};
+    const mat = (c) => (mats[c] ||= new MeshLambertMaterial({ color: c }));
+    const part = (x, y, z, w, h, d, color) => {
+      const m = new Mesh(box, mat(color));
+      m.scale.set(w, h, d);
+      m.position.set(x, FLOOR_H + y + h / 2, z);
+      m.castShadow = true;
+      m.receiveShadow = true;
+      g.add(m);
+    };
+    for (const f of list || []) {
+      const cx = f.x + f.w / 2, cz = f.y + f.h / 2;
+      const tipo = f.tipo || '';
+      if (tipo === 'Mesa' || tipo === 'Escritorio') {
+        // Tablero y cuatro patas: se ve que el robot puede pasar por debajo
+        const leg = 4, top = 16, inset = 5;
+        part(cx, top, cz, f.w, 3, f.h, '#C9A27A');
+        for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+          part(cx + sx * (f.w / 2 - inset), 0, cz + sz * (f.h / 2 - inset), leg, top, leg, '#A98563');
+        }
+      } else if (tipo === 'Sofá') {
+        part(cx, 0, cz, f.w, 9, f.h, '#C4B4A0');
+      } else if (tipo === 'Cama') {
+        part(cx, 0, cz, f.w, 9, f.h, '#E2D9CC');
+        part(cx, 9, cz, f.w - 6, 2, f.h - 6, '#F4EFE7');
+      } else if (tipo === 'Armario') {
+        part(cx, 0, cz, f.w, WALL_H * 0.8, f.h, /espejo/i.test(f.nombre || '') ? '#C9D6DF' : '#E6DED2');
+      } else {
+        part(cx, 0, cz, f.w, 12, f.h, '#D8CDBE');
+      }
+    }
+    this.furniture = g;
+    this.world.add(g);
+    this.needsRender = true;
+  }
+
   // Los nombres los decide la app (para que mapa y lista digan lo mismo)
   setNames(names) {
     this.names = names;

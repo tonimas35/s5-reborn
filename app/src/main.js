@@ -1,5 +1,5 @@
 // App para mamá: interfaz sencilla sobre Valetudo.
-import { valetudoApi, readAttributes, readStats } from './api.js';
+import { valetudoApi, readAttributes, readStats, loadFurniture } from './api.js';
 import { createDemoApi } from './demo.js';
 import { HouseMap } from './map3d.js';
 
@@ -16,6 +16,7 @@ const ICONS = {
   play: '<svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg>',
   alert: '<svg viewBox="0 0 24 24"><path d="M12 3 2.5 19.5h19z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>',
   idle: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg>',
+  table: '<svg viewBox="0 0 24 24"><path d="M3 9h18"/><path d="M6 9v10"/><path d="M18 9v10"/><path d="M9 13h6"/></svg>',
   rooms: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>'
 };
 const FAN_LABELS = { low: 'Suave', medium: 'Normal', high: 'Fuerte', max: 'Máxima' };
@@ -46,7 +47,9 @@ const state = {
   fanPresets: [],
   failures: 0,
   lastOk: Date.now(),
-  busy: false
+  busy: false,
+  furniture: [],
+  cleaningLabel: null // p. ej. 'debajo de la mesa' cuando limpia una zona
 };
 
 const map = new HouseMap($('map'), {
@@ -80,6 +83,7 @@ function article(name) {
   const fem = /(a|ción|sión)$/.test(n) && !/(baño|pasillo|salón|estudio|dormitorio)$/.test(n);
   return (fem ? 'la ' : 'el ') + n;
 }
+function furnitureName(f) { return /mesa del comedor/i.test(f.nombre || '') || !f.nombre ? 'la mesa' : 'la ' + f.nombre.toLowerCase(); }
 function segName(id) { const s = state.segments.find((x) => String(x.id) === String(id)); return s ? s.name : 'habitación'; }
 function errorText(err) {
   const raw = err ? (typeof err === 'string' ? err : err.message || err.description || '') : '';
@@ -115,11 +119,19 @@ async function run(fn, okMsg) {
 // ---------- Acciones ----------
 
 const actions = {
-  cleanAll: () => run(async () => { state.cleaning = null; await api.start(); }, 'Empiezo a limpiar toda la casa'),
+  cleanAll: () => run(async () => { state.cleaning = null; state.cleaningLabel = null; await api.start(); }, 'Empiezo a limpiar toda la casa'),
+  cleanUnder: (f) => run(async () => {
+    state.cleaning = null;
+    state.cleaningLabel = 'debajo de ' + furnitureName(f);
+    // Un margen alrededor para las sillas y las patas
+    const m = 25;
+    await api.cleanZone({ x: Math.round(f.x - m), y: Math.round(f.y - m), w: Math.round(f.w + 2 * m), h: Math.round(f.h + 2 * m) });
+  }, 'Voy a limpiar debajo de ' + furnitureName(f)),
   cleanSelected: () => {
     const ids = [...state.selected];
     run(async () => {
       state.cleaning = ids;
+      state.cleaningLabel = null;
       state.selecting = false;
       state.selected.clear();
       await api.cleanSegments(ids);
@@ -189,7 +201,8 @@ function render() {
       break;
     case 'cleaning':
       title = 'Limpiando la casa';
-      if (cleaningNames && cleaningNames.length === 1) title = 'Limpiando ' + article(cleaningNames[0]);
+      if (state.cleaningLabel) title = 'Limpiando ' + state.cleaningLabel;
+      else if (cleaningNames && cleaningNames.length === 1) title = 'Limpiando ' + article(cleaningNames[0]);
       else if (cleaningNames && cleaningNames.length > 1) title = 'Limpiando ' + joinNames(cleaningNames);
       main = 'Limpiando';
       sub = 'Llevo ' + fmtMinutes(state.stats.seconds) + ' · ' + fmtM2(state.stats.m2);
@@ -293,6 +306,7 @@ function render() {
     } else {
       specs.push(['Limpiar toda la casa', 'play', actions.cleanAll, 'primary', s === 'unknown']);
       if (state.segments.length) specs.push(['Elegir habitaciones', 'rooms', actions.pickRooms]);
+      for (const f of state.furniture.filter((x) => x.limpiarDebajo)) specs.push(['Limpiar debajo de ' + furnitureName(f), 'table', () => actions.cleanUnder(f)]);
       if (s === 'idle') specs.push(['Volver a la base', 'home', actions.home, 'ghost']);
     }
   } else if (s === 'cleaning') {
@@ -385,6 +399,12 @@ async function refreshMap() {
   render();
 }
 
+async function refreshFurniture() {
+  state.furniture = await loadFurniture();
+  map.setFurniture(state.furniture);
+  render();
+}
+
 async function refreshStats() {
   try { state.stats = readStats(await api.currentStats()) || state.stats; } catch (e) { /* nada */ }
 }
@@ -417,7 +437,7 @@ $('locate').addEventListener('click', actions.locate);
 async function boot() {
   render();
   state.fanPresets = await api.fanPresets().catch(() => []);
-  await Promise.all([refreshAttributes(), refreshMap(), refreshStats(), refreshCare()]);
+  await Promise.all([refreshAttributes(), refreshMap(), refreshStats(), refreshCare(), refreshFurniture()]);
 
   const busy = () => ['cleaning', 'returning', 'moving', 'manual_control'].includes(state.attrs.status);
   setInterval(refreshAttributes, 2000);
@@ -426,7 +446,7 @@ async function boot() {
     tick++;
     if (busy() || tick % 5 === 0) refreshMap();
     if (busy() || tick % 10 === 0) refreshStats();
-    if (tick % 100 === 0) refreshCare();
+    if (tick % 100 === 0) { refreshCare(); refreshFurniture(); }
   }, 3000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { refreshAttributes(); refreshMap(); } });
 }

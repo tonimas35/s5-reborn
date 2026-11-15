@@ -25,6 +25,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 - ✅ IP del robot reservada en el Livebox (`192.168.1.23`) y apuntada en el manual
 - ✅ **Autonomía:** ~1 %/min en potencia Normal → unos 75–80 min por carga. Con recarga a mitad, sigue solo
 - ✅ La app funciona en su iPhone (15 nov). Falta «Añadir a pantalla de inicio»
+- ✅ Puertas dibujadas por mí sobre el plano: bordes de la cocina ajustados a sus puertas. Paredes invisibles delante del armario de espejos del comedor y del espejo de la entrada (15 nov)
 - ✅ Primera prueba suya: «limpiar la cocina» salía al comedor. El borde de la cocina incluía una franja del comedor; dividida y unida al comedor (15 nov)
 - ⬜ Programar una limpieza automática (día y hora a elegir con ella)
 - ⬜ Probar el fregado de serie (depósito + paño) → manual, pestaña «El robot»
@@ -55,7 +56,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 | 3.6 | Servidor en Go en el robot con arranque automático | ✅ Sobrevive a reinicios |
 | 3.7 | Instalarla en el iPhone de mi madre: Safari → Compartir → «Añadir a pantalla de inicio» | ⬜ |
 | 3.8 | 🛠️ **Capa de muebles:** detección automática de zonas candidatas ([tools/muebles](tools/muebles/detectar.py)) + página para etiquetarlas (mesa, cama, sofá…) o dibujar las que falten | Todas las zonas revisadas |
-| 3.9 | Muebles en 3D en la app y botón «Limpiar debajo de la mesa» (limpieza por zona) | Mi madre lo usa después de comer |
+| 3.9 | 🛠️ Muebles en 3D en la app y botón «Limpiar debajo de la mesa» (limpieza por zona, con 25 cm de margen para las sillas). Instalado el 15 nov; los muebles salen de [exportar.py](tools/muebles/exportar.py) → `/mnt/data/muebles.json` | Mi madre lo usa después de comer |
 | 3.10 | Detección de cambios: comparar cada mapa nuevo con el etiquetado y marcar **«objeto no identificado»** | Avisa cuando aparece algo nuevo |
 | 3.11 | Aprender de los choques: guardar dónde frena y da marcha atrás en cada limpieza y, si se repite, proponer una pared invisible (p. ej. el armario de espejos del comedor) | La app propone la pared y mamá la acepta |
 

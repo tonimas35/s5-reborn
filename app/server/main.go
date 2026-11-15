@@ -75,6 +75,7 @@ func loadAssets() map[string]*asset {
 func main() {
 	listen := flag.String("listen", ":8080", "dirección donde escuchar")
 	upstream := flag.String("valetudo", "http://127.0.0.1:80", "dirección de Valetudo")
+	mueblesPath := flag.String("muebles", "/mnt/data/muebles.json", "fichero con los muebles etiquetados")
 	flag.Parse()
 
 	target, err := url.Parse(*upstream)
@@ -93,6 +94,12 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/api/", proxy)
+	// Los muebles viven fuera del binario para poder actualizarlos sin reinstalar la app
+	mux.HandleFunc("/muebles.json", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-store")
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		http.ServeFile(w, r, *mueblesPath)
+	})
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		p := r.URL.Path
 		if p == "/" {

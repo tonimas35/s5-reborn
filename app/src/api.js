@@ -38,6 +38,12 @@ export const valetudoApi = {
   home: () => request('PUT', cap('BasicControlCapability'), { action: 'home' }),
   locate: () => request('PUT', cap('LocateCapability'), { action: 'locate' }),
   setFan: (name) => request('PUT', cap('FanSpeedControlCapability') + '/preset', { name }),
+  // Limpiar un rectángulo del plano (en cm), p. ej. debajo de la mesa
+  cleanZone: ({ x, y, w, h }, iterations = 1) => request('PUT', cap('ZoneCleaningCapability'), {
+    action: 'clean',
+    zones: [{ points: { pA: { x, y }, pB: { x: x + w, y }, pC: { x: x + w, y: y + h }, pD: { x, y: y + h } } }],
+    iterations
+  }),
   cleanSegments: (ids) => request('PUT', cap('MapSegmentationCapability'), {
     action: 'start_segment_action',
     segment_ids: ids.map(String),
@@ -45,6 +51,18 @@ export const valetudoApi = {
     customOrder: false
   })
 };
+
+// Muebles etiquetados (los guarda /mnt/data/muebles.json en el robot). Si no hay, lista vacía.
+export async function loadFurniture() {
+  try {
+    const res = await fetch('/muebles.json', { cache: 'no-store' });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data.filter((m) => m && m.w > 0 && m.h > 0) : [];
+  } catch (e) {
+    return [];
+  }
+}
 
 // ---- Helpers para leer las respuestas ----
 

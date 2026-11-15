@@ -214,6 +214,14 @@ export function createDemoApi(options = {}) {
       s.plan = planFor(ids.map(String));
       s.status = 'cleaning';
     },
+    async cleanZone() {
+      await wait();
+      s.path = [];
+      s.seconds = 0;
+      s.m2 = 0;
+      s.plan = planFor(null).slice(0, 80);
+      s.status = 'cleaning';
+    },
     async pause() { await wait(); s.status = 'paused'; },
     async stop() { await wait(); s.status = 'idle'; s.plan = []; },
     async home() {
