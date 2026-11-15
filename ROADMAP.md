@@ -27,7 +27,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 - ✅ La app funciona en su iPhone (15 nov). Falta «Añadir a pantalla de inicio»
 - ✅ Puertas dibujadas por mí sobre el plano: bordes de la cocina ajustados a sus puertas. Paredes invisibles delante del armario de espejos del comedor y del espejo de la entrada (15 nov)
 - ✅ Primera prueba suya: «limpiar la cocina» salía al comedor. El borde de la cocina incluía una franja del comedor; dividida y unida al comedor (15 nov)
-- ⬜ Programar una limpieza automática (día y hora a elegir con ella)
+- 🛠️ Programar una limpieza automática: **programador en la app** instalado (15 nov), con días, hora y habitaciones. Usa los temporizadores de Valetudo y corrige solo el cambio de hora. Falta que ella elija día y hora
 - ⬜ Probar el fregado de serie (depósito + paño) → manual, pestaña «El robot»
 - ⬜ Probar el servo de la mopa con el ESP32 y reservar su IP → [firmware v0](firmware/README.md)
 - ⬜ Apuntar la **lista de quejas de mamá**. De momento, en Barcelona: un atasco del cepillo grande (pelos) y el parachoques bloqueado junto a la base

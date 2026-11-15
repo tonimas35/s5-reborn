@@ -2,6 +2,7 @@
 import { valetudoApi, readAttributes, readStats, loadFurniture } from './api.js';
 import { createDemoApi } from './demo.js';
 import { HouseMap } from './map3d.js';
+import { createSchedule } from './schedule.js';
 
 const params = new URLSearchParams(location.search);
 const DEMO = params.has('demo');
@@ -429,6 +430,8 @@ async function refreshCare() {
   } catch (e) { /* nada */ }
 }
 
+const schedule = createSchedule({ el: $('schedule'), getSegments: () => state.segments.filter((s) => s.area >= 0.5), toast });
+
 $('zoomIn').addEventListener('click', () => map.zoomBy(1.4));
 $('zoomOut').addEventListener('click', () => map.zoomBy(1 / 1.4));
 $('recenter').addEventListener('click', () => map.recenter());
@@ -438,6 +441,7 @@ async function boot() {
   render();
   state.fanPresets = await api.fanPresets().catch(() => []);
   await Promise.all([refreshAttributes(), refreshMap(), refreshStats(), refreshCare(), refreshFurniture()]);
+  if (!DEMO) schedule.refresh(); else $('schedule').hidden = true;
 
   const busy = () => ['cleaning', 'returning', 'moving', 'manual_control'].includes(state.attrs.status);
   setInterval(refreshAttributes, 2000);
