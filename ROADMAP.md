@@ -24,7 +24,8 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 - ✅ Habitaciones: Valetudo creó 8 solas; divididas y renombradas a 11 (comedor, cocina, entrada y pasillo, pasillo 2, tendedor, baño 1, baño 2, matrimonio, hijo 1, hijo 2, despacho)
 - ✅ IP del robot reservada en el Livebox (`192.168.1.23`) y apuntada en el manual
 - ✅ **Autonomía:** ~1 %/min en potencia Normal → unos 75–80 min por carga. Con recarga a mitad, sigue solo
-- ⬜ Instalar la app en su iPhone y que la use ella (limpiar todo, una habitación)
+- ✅ La app funciona en su iPhone (15 nov). Falta «Añadir a pantalla de inicio»
+- ✅ Primera prueba suya: «limpiar la cocina» salía al comedor. El borde de la cocina incluía una franja del comedor; dividida y unida al comedor (15 nov)
 - ⬜ Programar una limpieza automática (día y hora a elegir con ella)
 - ⬜ Probar el fregado de serie (depósito + paño) → manual, pestaña «El robot»
 - ⬜ Probar el servo de la mopa con el ESP32 y reservar su IP → [firmware v0](firmware/README.md)
@@ -56,6 +57,7 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 | 3.8 | 🛠️ **Capa de muebles:** detección automática de zonas candidatas ([tools/muebles](tools/muebles/detectar.py)) + página para etiquetarlas (mesa, cama, sofá…) o dibujar las que falten | Todas las zonas revisadas |
 | 3.9 | Muebles en 3D en la app y botón «Limpiar debajo de la mesa» (limpieza por zona) | Mi madre lo usa después de comer |
 | 3.10 | Detección de cambios: comparar cada mapa nuevo con el etiquetado y marcar **«objeto no identificado»** | Avisa cuando aparece algo nuevo |
+| 3.11 | Aprender de los choques: guardar dónde frena y da marcha atrás en cada limpieza y, si se repite, proponer una pared invisible (p. ej. el armario de espejos del comedor) | La app propone la pared y mamá la acepta |
 
 **Fallos encontrados probando con el robot real (12–14 nov), todos corregidos:** botones que se rehacían cada 2 s y perdían toques · Valetudo responde «OK» en texto y la app mostraba error en cada orden · aviso de «sin conexión» intermitente por los cortes de wifi al limpiar lejos del router · al recargar a mitad decía «la casa está tranquila» en vez de «cargando para seguir» · el mapa no se encuadraba al crecer · «Stuck front bumper» salía como «atascado» · habitaciones sin nombre todas iguales y distintas entre lista y mapa.
 
