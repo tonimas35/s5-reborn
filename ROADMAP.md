@@ -80,10 +80,10 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 | 5.1 | Comprar las piezas → [lista](hardware/lista-de-compra.md) | Todo recibido |
 | 5.2 | 🛠️ **Banco de pruebas** en la mesa: ESP32 + servo con el robot real ([firmware v0](firmware/README.md)); faltan DRV8833, motores y bomba | Cada pieza responde desde el ESP32 |
 | 5.3 | Firmware: leer el estado de Valetudo por REST y aplicar la lógica de [firmware/](firmware/README.md) | Las mopas se paran y se levantan solas al volver a la base |
-| 5.4 | Mecánica en 3D: discos, soporte de motores y elevación | Encaja bajo el robot y pasa por debajo de los muebles |
+| 5.4 | Mecánica en 3D: discos, soporte de motores y elevación ([boceto](hardware/modulo-mopa-boceto.png)) | Encaja bajo el robot y pasa por debajo de los muebles |
 | 5.5 | Alimentación desde la batería del robot, con fusible y convertidores | Funciona sin pilas aparte |
 | 5.6 | Pruebas de 1–2 semanas **en mi casa** | Sin fugas, sin atascos, autonomía aceptable |
-| 5.7 | Instalarlo en Reus | Mi madre lo usa a diario |
+| 5.7 | Instalarlo en Reus en una visita: quitar el depósito original, cable con fusible a la batería, enganchar el módulo | Mi madre lo usa a diario |
 
 **Coste:** 20–37 €. Impresora 3D: tengo acceso a una.
 

@@ -1,5 +1,7 @@
 # Lista de compra: módulo de mopa v2
 
+Boceto del módulo: [modulo-mopa-boceto.png](modulo-mopa-boceto.png).
+
 Precios orientativos de noviembre de 2026 (AliExpress/Amazon). Ya tengo: ESP32, servo SG90, zumbador, cables y protoboard.
 
 ## Electrónica
@@ -7,7 +9,7 @@ Precios orientativos de noviembre de 2026 (AliExpress/Amazon). Ya tengo: ESP32, 
 | Pieza | Para qué | Qué buscar | ~€ |
 |---|---|---|---|
 | Driver de motores | Mopas y bomba | **DRV8833** (2 canales, 1,5 A/canal) | 1–2 |
-| 2× micromotor | Girar las mopas | **N20 6 V, 150–200 rpm** | 4–6 |
+| 2× micromotor | Girar las mopas | **N20 6 V, 150–200 rpm, con reductora de tornillo sin fin** (JGY-N20): el eje sale de lado, así el motor va tumbado y cabe bajo el robot | 5–8 |
 | Minibomba | Agua dosificada | **Bomba peristáltica 5 V** (con cable) | 4–7 |
 | Convertidor DC-DC ×2 | Bajar los 14,4 V de la batería a 5 V | **LM2596** o **Mini560**, ≥3 A. Uno para potencia y otro para lógica | 2–4 |
 | Portafusibles + fusible 2 A | Protección de la toma de batería | Portafusibles en línea | 1–2 |
