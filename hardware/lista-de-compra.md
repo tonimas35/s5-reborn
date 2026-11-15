@@ -1,6 +1,6 @@
 # Lista de compra: módulo de mopa v2
 
-Boceto del módulo: [modulo-mopa-boceto.png](modulo-mopa-boceto.png) · Dónde va en el robot: [modulo-donde-va.png](modulo-donde-va.png).
+Boceto del módulo: [modulo-mopa-boceto.png](modulo-mopa-boceto.png) · Dónde va en el robot: [modulo-donde-va.png](modulo-donde-va.png) · Todas las piezas numeradas: [prototipo-piezas.png](prototipo-piezas.png).
 
 Precios orientativos de noviembre de 2026 (AliExpress/Amazon). Ya tengo: ESP32, servo SG90, zumbador, cables y protoboard.
 
