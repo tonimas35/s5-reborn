@@ -53,6 +53,9 @@ Leyenda: ✅ hecho · 🔜 siguiente · ⬜ pendiente · ❓ por decidir
 | 3.5 | Mensajes en castellano llano para los errores | ✅ Probados con errores reales (cepillo, parachoques) |
 | 3.6 | Servidor en Go en el robot con arranque automático | ✅ Sobrevive a reinicios |
 | 3.7 | Instalarla en el iPhone de mi madre: Safari → Compartir → «Añadir a pantalla de inicio» | ⬜ |
+| 3.8 | 🛠️ **Capa de muebles:** detección automática de zonas candidatas ([tools/muebles](tools/muebles/detectar.py)) + página para etiquetarlas (mesa, cama, sofá…) o dibujar las que falten | Todas las zonas revisadas |
+| 3.9 | Muebles en 3D en la app y botón «Limpiar debajo de la mesa» (limpieza por zona) | Mi madre lo usa después de comer |
+| 3.10 | Detección de cambios: comparar cada mapa nuevo con el etiquetado y marcar **«objeto no identificado»** | Avisa cuando aparece algo nuevo |
 
 **Fallos encontrados probando con el robot real (12–14 nov), todos corregidos:** botones que se rehacían cada 2 s y perdían toques · Valetudo responde «OK» en texto y la app mostraba error en cada orden · aviso de «sin conexión» intermitente por los cortes de wifi al limpiar lejos del router · al recargar a mitad decía «la casa está tranquila» en vez de «cargando para seguir» · el mapa no se encuadraba al crecer · «Stuck front bumper» salía como «atascado» · habitaciones sin nombre todas iguales y distintas entre lista y mapa.
 
