@@ -13,6 +13,9 @@ Precios orientativos de noviembre de 2026 (AliExpress/Amazon). Ya tengo: ESP32, 
 | Minibomba | Agua dosificada | **Bomba peristáltica 5 V** (con cable) | 4–7 |
 | Convertidor DC-DC ×2 | Bajar los 14,4 V de la batería a 5 V | **LM2596** o **Mini560**, ≥3 A. Uno para potencia y otro para lógica | 2–4 |
 | Portafusibles + fusible 2 A | Protección de la toma de batería | Portafusibles en línea | 1–2 |
+| ESP32 pequeño | El ESP32 de banco no cabe en el poco alto que hay | **ESP32-C3 SuperMini** (22 × 18 mm); el firmware vale casi igual | 3–4 |
+| Servo metálico | Levantar las mopas cerca del agua | **MG90S** (mismo tamaño que el SG90, engranajes de metal) | 3–4 |
+| Conector rápido | Soltar el módulo de la batería sin herramientas | **XT30** macho y hembra (o JST-XH de 2 pines) | 1–2 |
 | *Opcional:* sensor ultrasónico | Detectar alfombras | **HC-SR04**, con divisor de tensión en ECHO | 1–2 |
 
 **Truco:** los dos motores van **al mismo canal** del DRV8833, uno con la polaridad invertida, para que giren en sentidos opuestos como en los robots comerciales. El segundo canal queda para la bomba.
@@ -26,7 +29,14 @@ Precios orientativos de noviembre de 2026 (AliExpress/Amazon). Ya tengo: ESP32, 
 | Cable de silicona 22 AWG, termorretráctil, tornillería M2/M3 | 3–5 |
 | PETG para discos, soporte y elevación | — |
 
-**Total estimado: 20–37 €.**
+**Total estimado: 30–50 €.**
+
+## Herramientas
+
+- **Pie de rey** (calibre): para medir el depósito original y el hueco. Imprescindible. ~8 €.
+- Soldador, estaño y termorretráctil.
+- Multímetro: para comprobar la tensión de la batería y ajustar los convertidores a 5 V antes de conectar nada.
+- Impresora 3D con PETG: tengo acceso a una.
 
 ## Puesta a punto del robot (aparte)
 
