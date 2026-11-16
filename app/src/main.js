@@ -1,5 +1,5 @@
 // App para mamá: interfaz sencilla sobre Valetudo.
-import { valetudoApi, readAttributes, readStats, loadFurniture } from './api.js';
+import { valetudoApi, readAttributes, readStats, loadFurniture, loadBackupNames } from './api.js';
 import { createDemoApi } from './demo.js';
 import { HouseMap } from './map3d.js';
 import { createSchedule } from './schedule.js';
@@ -50,6 +50,7 @@ const state = {
   lastOk: Date.now(),
   busy: false,
   furniture: [],
+  backupNames: {},
   cleaningLabel: null // p. ej. 'debajo de la mesa' cuando limpia una zona
 };
 
@@ -391,6 +392,7 @@ async function refreshMap() {
       for (const s of segs) {
         const named = (names || []).find((n) => String(n.id) === s.id);
         if (named && named.name) s.name = named.name;
+        else if (state.backupNames[s.id]) s.name = state.backupNames[s.id];
       }
     }
     state.segments = segs;
@@ -401,6 +403,7 @@ async function refreshMap() {
 }
 
 async function refreshFurniture() {
+  state.backupNames = await loadBackupNames();
   state.furniture = await loadFurniture();
   map.setFurniture(state.furniture);
   render();
@@ -440,7 +443,8 @@ $('locate').addEventListener('click', actions.locate);
 async function boot() {
   render();
   state.fanPresets = await api.fanPresets().catch(() => []);
-  await Promise.all([refreshAttributes(), refreshMap(), refreshStats(), refreshCare(), refreshFurniture()]);
+  await refreshFurniture();
+  await Promise.all([refreshAttributes(), refreshMap(), refreshStats(), refreshCare()]);
   if (!DEMO) schedule.refresh(); else $('schedule').hidden = true;
 
   const busy = () => ['cleaning', 'returning', 'moving', 'manual_control'].includes(state.attrs.status);

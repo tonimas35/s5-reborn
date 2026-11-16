@@ -64,6 +64,18 @@ export async function loadFurniture() {
   }
 }
 
+// Nombres de respaldo (id -> nombre) por si el robot pierde los suyos al editar el mapa
+export async function loadBackupNames() {
+  try {
+    const res = await fetch('/nombres.json', { cache: 'no-store' });
+    if (!res.ok) return {};
+    const data = await res.json();
+    return data && typeof data === 'object' && !Array.isArray(data) ? data : {};
+  } catch (e) {
+    return {};
+  }
+}
+
 // ---- Helpers para leer las respuestas ----
 
 export function readAttributes(attrs) {
