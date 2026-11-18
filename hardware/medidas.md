@@ -26,3 +26,11 @@ Tomadas con cinta métrica el 16 nov 2026 en Reus (precisión ±3–5 mm). Las d
 ## Lo que implica
 
 Debajo de la parte de atrás hay **unos 18 mm de alto en total** (el depósito, de unos 15 mm, más el paño). Todo el módulo, mopas incluidas, tiene que caber ahí. Ver la decisión de diseño en el ROADMAP (fase 5).
+
+## Decisión (18 nov)
+
+Mopas **giratorias**. Como solo hay ~18 mm de alto, los motores tienen que ir tumbados y ser muy finos (planetarios de Ø 6–8 mm con una corona dentada en cada disco); los N20 con tornillo sin fin no caben.
+
+No existe un modelo CAD del S5 ni de su depósito publicado (solo las medidas externas oficiales: 353 × 350 × 96,5 mm, [iFixit](https://www.ifixit.com/Device/Roborock_S5)). Las medidas exactas saldrán de:
+- un **depósito de recambio** (se vende suelto, 150 ml, «depósito agua Roborock S5 S50») medido con pie de rey;
+- el **contorno 1:1** del depósito, pasándolo por un escáner de papel con una regla al lado.
